@@ -1,5 +1,7 @@
 servers:
   - url: 'https://rampdb.nih.gov'
+    description: Production server
+    x-maturity: production
  # - url: 'https://ramp-api-alpha.ncats.io'
   # - url: 'http://127.0.0.1:5762/'
 openapi: 3.0.3
@@ -13,7 +15,14 @@ info:
     email: NCATSRaMP@nih.gov
     x-id: 'https://github.com/tsheils'
   termsOfService: https://rampdb.nih.gov
+  x-translator:
+    infores: "infores:rampdb"
+    biolink-version: "3.1.1"
+    component: KP
+    team:
+      - Service Provider
 tags:
+  - name: translator
   - name: NCATS-API
 paths:
   /api/source_versions:
@@ -161,6 +170,9 @@ paths:
             type: string
   /api/pathways-from-analytes:
     post:
+      x-bte-kgs-operations:
+        - "$ref": "#/components/x-bte-kgs-operations/chemical2pathway_1"
+        - "$ref": "#/components/x-bte-kgs-operations/gene2pathway_1"
       summary: Return pathways from given list of analytes
       responses:
         '200':
@@ -1238,3 +1250,70 @@ paths:
                                "hmdb:HMDB0001015", "hmdb:HMDB0001138", "hmdb:HMDB0029159", "hmdb:HMDB0029412",
                                "hmdb:HMDB0034365", "hmdb:HMDB0035227", "hmdb:HMDB0007973", "hmdb:HMDB0008057",
                                "hmdb:HMDB0011211" ]
+components:
+  x-bte-kgs-operations:
+  ## - character-case doesn't seem to matter (hmdb vs HMDB)
+  ## - don't need to annotate every ID-namespace. Only annotate those that retrieve non-overlapping data
+  ##   for example, these equivalent IDs for glutamic acid retrieve the same data:  
+  ##   PUBCHEM:33032,CHEBI:16015,HMDB:HMDB0000148,KEGG:C00025
+  ## - chemicals/metabolites:
+  ##   - choosing hmdb for querying because it's in the endpoint example
+  ##   - other ID-namespaces: CAS, chebi, kegg, pubchem 
+  ##     (CHEBI / KEGG.COMPOUND / PUBCHEM.COMPOUND in Translator's biolink-model)
+  ## - pathways: WIKIPATHWAYS, REACT, KEGG.PATHWAY (Translator's biolink-model spelling)
+  ######################################################################################################################
+  ## pathways-from-analytes endpoint x-bte annotation
+  ## - goes from analytes (chemical/metabolites, gene/proteins) -> pathways
+  ##   currently cannot retrieve data in opposite direction (pathway -> analytes endpoint uses pathway names, not IDs)
+    chemical2pathway_1:
+    ## HMDB chem -> REACT pathway
+    - supportBatch: false
+      useTemplating: true
+      inputs:
+      - id: HMDB
+        semantic: SmallMolecule
+      ## create an array of strings, 1 string per ID
+      requestBody:
+        body: 
+          analytes: "{{ queryInputs | replPrefix('hmdb') }}"
+      outputs:
+      - id: REACT
+        semantic: Pathway
+      ## no parameters needed
+      parameters: {}
+      ## is this the correct predicate?
+      predicate: participates_in
+      response_mapping:
+        "$ref": "#/components/x-bte-response-mapping/reactome"
+      # testExamples:
+      #   - qInput: "HMDB:HMDB0000148"        ## Glutamate; L-Glutamic acid
+      #     oneOutput: "REACT:R-HSA-15869"    ## Metabolism of nucleotides
+      ## another possible input is HMDB0000064 (creatine)
+    gene2pathway_1:
+    - supportBatch: false
+      useTemplating: true
+      inputs:
+        - id: NCBIGene
+          semantic: Gene
+      ## create an array of strings, 1 string per ID
+      requestBody:
+        body: 
+          analytes: "{{ queryInputs | replPrefix('entrez') }}"
+      outputs:
+      - id: REACT
+        semantic: Pathway
+      ## no parameters needed
+      parameters: {}
+      ## is this the correct predicate?
+      predicate: participates_in
+      response_mapping:
+        "$ref": "#/components/x-bte-response-mapping/reactome"
+      # testExamples:
+      #   - qInput: "NCBIGene:5241"             ## PGR
+      #     oneOutput: "REACT:R-HSA-8939211"    ## ESR-mediated signaling
+      ## another possible input is 4193 (MDM2)
+  x-bte-response-mapping:
+    reactome:
+      REACT: data.pathwayId            ## no prefix
+      output_name: data.pathwayName
+      ## another field data.pathwaySource: values seem to be wiki,reactome,kegg; corresponds to ID of output
