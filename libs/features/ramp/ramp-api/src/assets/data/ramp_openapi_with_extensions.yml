@@ -106,17 +106,16 @@ paths:
             'genes'
           in: query
           required: true
+          example: "metabolites"
           schema:
             type: string
         - name: query_scope
           description: specifies 'global' or 'mapped-to-pathway'
           in: query
           required: true
+          example: "mapped-to-pathway"
           schema:
             type: string
-          example:
-            analytetype: "metabolites"
-            query_scope: "mapped-to-pathway"
   /api/ontology-types:
     get:
       summary: Return all types of ontologies present in RaMP-DB
@@ -205,7 +204,6 @@ paths:
                 analyte_type:
                   type: string
                   enum: ["gene", "metabolite", "both"]
-                  required: false
               example:
                 pathway: [ "De Novo Triacylglycerol Biosynthesis", "sphingolipid metabolism"]
                 analyte_type: "both"
@@ -232,7 +230,6 @@ paths:
                 NameOrIds:
                   type: string
                   enum: [ "name", "ids"]
-                  required: false
               example:
                 metabolite: [ "ensembl:ENSG00000135679", "hmdb:HMDB0000064", "hmdb:HMDB0000148", "ensembl:ENSG00000141510"]
                 NameOrIds: "ids"
@@ -259,7 +256,6 @@ paths:
                 format:
                   type: string
                   enum: [ "json", "tsv" ]
-                  required: false
               example:
                 ontology: ["Colon", "Liver", "Lung"]
                 format: "json"
@@ -286,7 +282,6 @@ paths:
                 biospecimen:
                   type: string
                   enum: ["Blood", "Adipose", "Heart", "Urine", "Brain", "Liver", "Kidney", "Saliva", "Feces"]
-                  required: false
               example:
                 metabolites: ["hmdb:HMDB0000056", "hmdb:HMDB0000439", "hmdb:HMDB0000479", "hmdb:HMDB0000532",
                               "hmdb:HMDB0001015", "hmdb:HMDB0001138", "hmdb:HMDB0029159", "hmdb:HMDB0029412",
@@ -340,7 +335,6 @@ paths:
                 NameOrIds:
                   type: string
                   enum: [ "name", "ids" ]
-                  required: false
               example:
                 analyte: [ "ensembl:ENSG00000135679", "hmdb:HMDB0000064", "hmdb:HMDB0000148", "ensembl:ENSG00000141510"]
   /api/combined-fisher-test:
@@ -370,7 +364,6 @@ paths:
                 biospecimen:
                   type: string
                   enum: [ "Blood", "Adipose", "Heart", "Urine", "Brain", "Liver", "Kidney", "Saliva", "Feces" ]
-                  required: false
               example: # Sample object
                 analytes: ["hmdb:HMDB0000033", "hmdb:HMDB0000052", "hmdb:HMDB0000094", "hmdb:HMDB0000161",
                            "hmdb:HMDB0000168", "hmdb:HMDB0000191", "hmdb:HMDB0000201", "chemspider:10026",
@@ -407,10 +400,8 @@ paths:
                 pval_type:
                   type: string
                   enum: ["fdr", "holm", "pval"]
-                  required: false
                 pval_cutoff:
                   type: number
-                  required: false
               example: # Sample object
                 fishers_results:
                   analyte_type: ["both"]
@@ -819,13 +810,10 @@ paths:
               properties:
                 min_pathway_tocluster:
                   type: number
-                  required: false
                 perc_analyte_overlap:
                   type: number
-                  required: false
                 perc_pathway_overlap:
                   type: number
-                  required: false
                 fishers_results:
                   type: array
                   items:
@@ -833,10 +821,8 @@ paths:
                 pval_type:
                   type: string
                   enum: [ "fdr", "holm", "pval" ]
-                  required: false
                 pval_cutoff:
                   type: number
-                  required: false
               example: # Sample object
                 min_pathway_tocluster: 2
                 perc_analyte_overlap: 0.2
@@ -1247,7 +1233,6 @@ paths:
                 biospecimen:
                   type: string
                   enum: [ "Blood", "Adipose", "Heart", "Urine", "Brain", "Liver", "Kidney", "Saliva", "Feces" ]
-                  required: false
               example:
                 metabolites: [ "hmdb:HMDB0000056", "hmdb:HMDB0000439", "hmdb:HMDB0000479", "hmdb:HMDB0000532",
                                "hmdb:HMDB0001015", "hmdb:HMDB0001138", "hmdb:HMDB0029159", "hmdb:HMDB0029412",
