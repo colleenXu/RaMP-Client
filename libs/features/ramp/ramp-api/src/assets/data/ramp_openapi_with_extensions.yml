@@ -115,16 +115,22 @@ paths:
             'genes'
           in: query
           required: true
-          example: "metabolites"
+          # example: "metabolites"
           schema:
             type: string
+            enum:
+              - metabolites
+              - genes
         - name: query_scope
           description: specifies 'global' or 'mapped-to-pathway'
           in: query
           required: true
-          example: "mapped-to-pathway"
+          # example: "mapped-to-pathway"
           schema:
             type: string
+            enum:
+              - global
+              - mapped-to-pathway
   /api/ontology-types:
     get:
       summary: Return all types of ontologies present in RaMP-DB
