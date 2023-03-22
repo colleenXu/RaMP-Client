@@ -1279,9 +1279,15 @@ components:
       - id: HMDB
         semantic: SmallMolecule
       ## create an array of strings, 1 string per ID
+      requestBodyType: object
       requestBody:
-        body: 
-          analytes: "{{ queryInputs | replPrefix('hmdb') }}"
+        body: >-
+          { 
+            "analytes":
+              {{ queryInputs 
+                 | replPrefix('hmdb') 
+                 | dump }}
+          }
       outputs:
       - id: REACT
         semantic: Pathway
@@ -1302,9 +1308,15 @@ components:
         - id: NCBIGene
           semantic: Gene
       ## create an array of strings, 1 string per ID
+      requestBodyType: object
       requestBody:
-        body: 
-          analytes: "{{ queryInputs | replPrefix('entrez') }}"
+        body: >-
+          { 
+            "analytes":
+              {{ queryInputs 
+                 | replPrefix('entrez') 
+                 | dump }}
+          }
       outputs:
       - id: REACT
         semantic: Pathway
