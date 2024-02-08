@@ -1307,9 +1307,9 @@ components:
       predicate: participates_in
       response_mapping:
         "$ref": "#/components/x-bte-response-mapping/reactome"
-      # testExamples:
-      #   - qInput: "HMDB:HMDB0000148"        ## Glutamate; L-Glutamic acid
-      #     oneOutput: "REACT:R-HSA-15869"    ## Metabolism of nucleotides
+      testExamples:
+        - qInput: "HMDB:HMDB0000148"        ## Glutamate; L-Glutamic acid
+          oneOutput: "REACT:R-HSA-15869"    ## Metabolism of nucleotides
       ## another possible input is HMDB0000064 (creatine)
     gene2pathway_1:
     - supportBatch: false
@@ -1336,9 +1336,9 @@ components:
       predicate: participates_in
       response_mapping:
         "$ref": "#/components/x-bte-response-mapping/reactome"
-      # testExamples:
-      #   - qInput: "NCBIGene:5241"             ## PGR
-      #     oneOutput: "REACT:R-HSA-8939211"    ## ESR-mediated signaling
+      testExamples:
+        - qInput: "NCBIGene:5241"             ## PGR
+          oneOutput: "REACT:R-HSA-8939211"    ## ESR-mediated signaling
       ## another possible input is 4193 (MDM2)
   x-bte-response-mapping:
     reactome:
