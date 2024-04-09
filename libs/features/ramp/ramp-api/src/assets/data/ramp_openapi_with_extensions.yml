@@ -1268,6 +1268,7 @@ paths:
                                "hmdb:HMDB0011211" ]
 components:
   x-bte-kgs-operations:
+  ## paper with more info: https://doi.org/10.1093/bioinformatics/btac726
   ## - character-case doesn't seem to matter (hmdb vs HMDB)
   ## - don't need to annotate every ID-namespace. Only annotate those that retrieve non-overlapping data
   ##   for example, these equivalent IDs for glutamic acid retrieve the same data:  
@@ -1305,6 +1306,8 @@ components:
       parameters: {}
       ## is this the correct predicate?
       predicate: participates_in
+      knowledge_level: knowledge_assertion
+      agent_type: automated_agent
       response_mapping:
         "$ref": "#/components/x-bte-response-mapping/reactome"
       testExamples:
@@ -1334,6 +1337,8 @@ components:
       parameters: {}
       ## is this the correct predicate?
       predicate: participates_in
+      knowledge_level: knowledge_assertion
+      agent_type: automated_agent
       response_mapping:
         "$ref": "#/components/x-bte-response-mapping/reactome"
       testExamples:
